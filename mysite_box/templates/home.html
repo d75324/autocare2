@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+    <div class="container my-4">
+        <h5 class="display-6 fw-normal text-body-emphasis text-center">Hola!</h5>
+    </div>
+<hr>
+    <div class="row mb-3 text-center">
+        <div class="col-xl-4 themed-grid-col"> <b>Usuario</b>: {{ user.username }}</div>
+        <div class="col-xl-4 themed-grid-col"></div>
+        <div class="col-xl-4 themed-grid-col"></div>
+    </div>
+<hr>
+<ul class="list-group">
+    <li class="list-group-item"> {{ user.username }} - {{ user.email }}</li>
+    <li class="list-group-item"> {{ user.email }} </li>
+    <li class="list-group-item"> {{ user.username }} </li>
+    <li class="list-group-item"> Patente:  {{ car.plate }} </li>
+    <li class="list-group-item">
+      ferozo
+</li>
+</ul>
+<hr>
+<div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+<hr>
+<span class="placeholder col-12"></span>
+
+<span class="placeholder col-12 bg-primary">asdf</span>
+<span class="placeholder col-12 bg-secondary">asdf</span>
+<span class="placeholder col-12 bg-success">asdf</span>
+<span class="placeholder col-12 bg-danger">asdf</span>
+<span class="placeholder col-12 bg-warning">asdf</span>
+<span class="placeholder col-12 bg-info">asdf</span>
+<span class="placeholder col-12 bg-light">asdf</span>
+<span class="placeholder col-12 bg-dark">asdf</span>
+<hr>
+
+<div class="container my-4">
+<h4>nada por acá</h4>
+</div>
+
+<div class="text-center mt-3">
+  <a class="btn btn-lg btn-primary" href="http//">Iniciar Sesión</a><br>
+  <a class="btn btn-lg btn-warning" href="http//">Registrarse</a>
+</div>
+
+    {% endblock %}

@@ -4,11 +4,25 @@ from django.views.generic import TemplateView, ListView
 from .models import Vehicle
 from django.views import View
 from .forms import RegisterForm
+from django.contrib.auth.models import Group
 
-
+# pagina de inicio
 class HomeView(TemplateView):
     template_name = 'home.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        context['group_name'] = group_name
+        return context
+    
+
+# pagina de precios
 class PricingView(TemplateView):
     template_name = 'pricing.html'
 

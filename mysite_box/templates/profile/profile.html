@@ -1,0 +1,41 @@
+{% extend 'base.html' %}
+
+{% block content %}
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- car datos del usuario, personal o profesional-->
+             <div class="card border rounded-2 shadow p-3 mb-3">
+                <div class="card-body">
+                    <!--card body...-->
+                    <img class="img-thumbnail rounded-circle mb-3" src=" {{ user.profile.image.url }} " alt="{{ user.username }}" style="width: 100px;">
+                    <h2>{{ user.first_name }} {{ user.last_name }} </h2>
+                    <h4>Tipo de Usuario</h4>
+                    <p><strong>Nombre de Usuario:</strong> {{ user.username }} </p>
+                    <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
+                    <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
+                    <hr>
+                    <a class="btn btn-outline-secondary" href="">Editar Perfil</a>
+                    <a class="btn btn-danger" href="">Cerrar Sesión</a>
+                </div>
+             </div>
+        </div>
+        <div class="col-md-8">
+            <!-- card datos de vehiculos-->
+             <div class="card border rounded-2 shadow p-3 mb-3">
+                <div class="card-body">
+                    <!-- evaluar el grupo al que pertenece el usuario-->
+                     
+
+
+
+
+                </div>
+             </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

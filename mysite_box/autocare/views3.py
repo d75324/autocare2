@@ -1,3 +1,5 @@
+# este es un archivo de prueba...
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.generic import TemplateView, ListView
@@ -6,69 +8,33 @@ from django.views import View
 from .forms import RegisterForm
 from django.contrib.auth.models import Group
 
+class BaseView(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        context['group_name'] = group_name
+        return context    
+
 # pagina de inicio
-class HomeView(TemplateView):
+class HomeView(BaseView):
     template_name = 'home.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
-
-# pagina de Features
-
-class VersionesView(TemplateView):
+# pagina de Versiones
+class VersionesView(BaseView):
     template_name = 'versiones.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
-
 # pagina de precios
-class PricingView(TemplateView):
+class PricingView(BaseView):
     template_name = 'pricing.html'
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
 
 class CarsView(ListView):
     model = Vehicle
     template_name = 'cars.html'
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
-
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -100,4 +66,3 @@ class RegisterView(View):
             'form': user_creation_form
         }
         return render(request, 'registration/register.html', data)
-

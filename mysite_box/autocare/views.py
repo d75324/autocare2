@@ -6,7 +6,56 @@ from django.views import View
 from .forms import RegisterForm
 from django.contrib.auth.models import Group
 
-# pagina de inicio
+'''
+# custom template view original
+class CustomTemplateView(TemplateView):
+    group_name = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                self.group_name = group.name
+        context ['group_name'] = self.group.name
+        return context
+'''
+
+# custom template view
+class CustomTemplateView(TemplateView):
+    group_name = None
+    group = None  # Definir el atributo group
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            self.group = Group.objects.filter(user=user).first()
+            if self.group:
+                self.group_name = self.group.name
+        context['group_name'] = self.group_name
+        return context
+
+
+
+
+# pagina de antes de logeuarse
+class CeroView(TemplateView):
+    template_name = 'cero.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        context['group_name'] = group_name
+        return context
+
+# pagina de inicio una vez logueado
 class HomeView(TemplateView):
     template_name = 'home.html'
 
@@ -19,7 +68,7 @@ class HomeView(TemplateView):
             if group:
                 group_name = group.name
         context['group_name'] = group_name
-        return context    
+        return context
 
 # pagina de Features
 
@@ -101,3 +150,62 @@ class RegisterView(View):
         }
         return render(request, 'registration/register.html', data)
 
+'''
+#esta anda:
+# pagina de perfil
+class ProfileView(CustomTemplateView):
+    template_name = 'profile/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        return context
+'''
+
+# pagina de perfil, otro intento
+class ProfileView(CustomTemplateView):
+    template_name = 'profile/profile.html'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # if self.request.user.groups.filter(name='Mecanicos').exists():
+        if self.request.user.is_anonymous:
+            return queryset.none()
+        else:
+            return queryset.filter(owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_anonymous:
+            context['object_list'] = Vehicle.objects.none()
+        else:
+            context['object_list'] = Vehicle.objects.filter(owner=self.request.user)
+        return context
+
+
+'''
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        context['group_name'] = group_name
+        context['vehicles'] = Vehicle.objects.all()
+        return context
+'''
+
+'''
+# llevar datos del modelo Vehicle a la particular y profesional.html
+def profile_view(request):
+    user = request.user
+    group_name = None
+    if user.is_authenticated:
+        group = Group.objects.filter(user=user).first()
+        if group:
+            group_name = group.name
+    cars = Vehicle.objects.all()
+    return render(request, 'profile/profile.html', {'group_name': group_name, 'cars': cars})
+'''

@@ -1,4 +1,5 @@
 # este es un archivo de prueba...
+# alternativa a la vista views.py, usando BaseView(TemplateView) en lugar de CustomTemplateView(TemplateView):
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login

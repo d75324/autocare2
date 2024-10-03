@@ -1,41 +1,29 @@
-{% extend 'base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="container my-3">
-    <div class="row">
-        <div class="col-md-4">
-            <!-- car datos del usuario, personal o profesional-->
-             <div class="card border rounded-2 shadow p-3 mb-3">
-                <div class="card-body">
-                    <!--card body...-->
-                    <img class="img-thumbnail rounded-circle mb-3" src=" {{ user.profile.image.url }} " alt="{{ user.username }}" style="width: 100px;">
-                    <h2>{{ user.first_name }} {{ user.last_name }} </h2>
-                    <h4>Tipo de Usuario</h4>
-                    <p><strong>Nombre de Usuario:</strong> {{ user.username }} </p>
-                    <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
-                    <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
-                    <hr>
-                    <a class="btn btn-outline-secondary" href="">Editar Perfil</a>
-                    <a class="btn btn-danger" href="">Cerrar Sesión</a>
-                </div>
-             </div>
-        </div>
-        <div class="col-md-8">
-            <!-- card datos de vehiculos-->
-             <div class="card border rounded-2 shadow p-3 mb-3">
-                <div class="card-body">
-                    <!-- evaluar el grupo al que pertenece el usuario-->
-                     
-
-
-
-
-                </div>
-             </div>
-
-        </div>
-    </div>
+<p>Profile</p>
+<div class="container my-4">
+    <h1 class="text-center">Mis Autos</h1>
+    <ul>
+        {% for car in object_list.all %}
+        <li>{{ car.brand }} {{ car.plate }} {{ car.year }}</li>
+        {% endfor %}
+    </ul>
 </div>
+<hr>
+<div class="row mb-3 text-center">
+    <div class="col-xl-4 themed-grid-col"> <b>Usuario</b>: {{ user.username }}</div>
+    <div class="col-xl-4 themed-grid-col"></div>
+    <div class="col-xl-4 themed-grid-col"></div>
+</div>
+<hr>
 
+<div class="container my-4">
+<ul class="list-group">
+    {% for car in object_list.all %}
+    <li class="list-group-item"> <b>Marca: </b>{{ car.brand }} <b>Patente: </b> {{ car.plate }} {{ car.year }}</li>
+    {% endfor %}
+</ul>
+</div>
 {% endblock %}

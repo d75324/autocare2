@@ -1,26 +1,13 @@
 {% extends 'base.html' %}
 
     {% block content %}
+
+    <!-- todo empieza aqui! -->
     <div class="container my-4">
         <h5 class="display-6 fw-normal text-body-emphasis text-center">Hola!</h5>
     </div>
 <hr>
-    <div class="row mb-3 text-center">
-        <div class="col-xl-4 themed-grid-col"> <b>Bienvenido!</b>: {{ user.username }}</div>
-        <div class="col-xl-4 themed-grid-col"></div>
-        <div class="col-xl-4 themed-grid-col"></div>
-    </div>
-<hr>
-<ul class="list-group">
-    <li class="list-group-item"> {{ user.username }} - {{ user.email }}</li>
-    <li class="list-group-item"> {{ user.email }} </li>
-    <li class="list-group-item"> {{ user.username }} </li>
-    <li class="list-group-item"> Patente:  {{ car.plate }} </li>
-    <li class="list-group-item">
-      ferozo
-</li>
-</ul>
-<hr>
+
 <div class="card" style="width: 18rem;">
     <img src="..." class="card-img-top" alt="...">
     <div class="card-body">
@@ -29,12 +16,5 @@
       <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
   </div>
-<hr>
-<p>atento!</p>
-<hr>
-
-<div class="container my-4">
-<h4>nada por acá</h4><br><br>
-</div>
-
+    <!-- todo termina aqui! -->
     {% endblock %}

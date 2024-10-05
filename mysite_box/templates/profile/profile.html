@@ -1,29 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<p>Profile</p>
-<div class="container my-4">
-    <h1 class="text-center">Mis Autos</h1>
-    <ul>
-        {% for car in object_list.all %}
-        <li>{{ car.brand }} {{ car.plate }} {{ car.year }}</li>
-        {% endfor %}
-    </ul>
+<hr>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- car datos del usuario, personal o profesional-->
+             <div class="card border rounded-2 shadow p-3 mb-3">
+                <div class="card-body">
+                    <!--card body...-->
+                    <img class="img-thumbnail rounded-circle mb-3" src=" {{ user.profile.image.url }} " alt="{{ user.username }}" style="width: 100px;">
+                    <h2>{{ user.first_name }} {{ user.last_name }} </h2>
+                    <h5> {{ group_name }} </h5>
+                    <hr>
+                    <p><strong>Nombre de Usuario:</strong> {{ user.username }} </p>
+                    <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
+                    <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
+                    <hr>
+                        <div class="d-flex justify-content-center my-3">
+                            <a class="btn btn-outline-secondary mx-2" href="">Editar Perfil</a>
+                            <a class="btn btn-danger mx-2" href="">Agregar Vehículo</a>
+                        </div>
+                </div>
+             </div>
+        </div>
+        <div class="col-md-8">
+             <div class="card border rounded-2 shadow p-3 mb-3">
+                <div class="card-body">
+                    <h3>Tus vehículos registrados:</h3>
+                    <br>
+                        <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Patente</th>
+                                <th scope="col">Marca</th>
+                                <th scope="col">Año</th>
+                                <th scope="col">Kilometros</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for car in object_list.all %}
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td> {{ car.plate }} </td>
+                                        <td> {{ car.brand }} </td>
+                                        <td> {{ car.year }} </td>
+                                        <td> {{ car.year }} </td>
+                                        <td scope="col">
+                                            <div class="col-xl-4 themed-grid-col">
+                                                <a href="#" class="badge text-bg-success text-decoration-none">
+                                                    + Detalles</a>
+                                            </div>
+                                        </td>
+                                        <td scope="col">
+                                            <div class="col-xl-4 themed-grid-col">
+                                                <a href="#" class="badge text-bg-danger text-decoration-none">
+                                                    Eliminar</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+             </div>
+        </div>
+    </div>
 </div>
 <hr>
-<div class="row mb-3 text-center">
-    <div class="col-xl-4 themed-grid-col"> <b>Usuario</b>: {{ user.username }}</div>
-    <div class="col-xl-4 themed-grid-col"></div>
-    <div class="col-xl-4 themed-grid-col"></div>
-</div>
-<hr>
+<!--
+nada por aqui!
+-->
 
-<div class="container my-4">
-<ul class="list-group">
-    {% for car in object_list.all %}
-    <li class="list-group-item"> <b>Marca: </b>{{ car.brand }} <b>Patente: </b> {{ car.plate }} {{ car.year }}</li>
-    {% endfor %}
-</ul>
-</div>
 {% endblock %}

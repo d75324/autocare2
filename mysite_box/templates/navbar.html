@@ -27,9 +27,11 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-success">
       {% endif %}
 
-      
-        <li><a href="{% url 'home' %}" class="nav-link px-2 text-white">Home</a></li>        
-
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'profile' %}" class="nav-link px-2 text-white">Home</a></li>
+      {% else %}
+        <li><a href="{% url 'home' %}" class="nav-link px-2 text-white">Home</a></li>
+      {% endif %}
 
         <li><a href="{% url 'pricing' %}" class="nav-link px-2 text-white">Precios</a></li>
         <li><a href="{% url 'cero' %}" class="nav-link px-2 text-white">Pruebas</a></li>

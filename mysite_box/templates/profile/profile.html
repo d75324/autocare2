@@ -10,15 +10,20 @@
                 <div class="card-body">
                     <!--card body...-->
                     <img class="img-thumbnail rounded-circle mb-3" src=" {{ user.profile.image.url }} " alt="{{ user.username }}" style="width: 100px;">
-                    <h2>{{ user.first_name }} {{ user.last_name }} </h2>
+                    <h3> {{ user.first_name }} {{ user.last_name }} </h3>
                     <h5> {{ group_name }} </h5>
                     <hr>
-                    <p><strong>Nombre de Usuario:</strong> {{ user.username }} </p>
-                    <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
+                    <p><strong>Nombre del Usuario:</strong> {{ user.username }} </p>
+                    <p><strong>Correo Electrónico: </strong> {{ user.profile.email }} </p>
                     <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
+                    <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
+                    <p><strong>Ciudad: </strong> {{ user.profile.location }} </p>
                     <hr>
                         <div class="d-flex justify-content-center my-3">
-                            <a class="btn btn-outline-secondary mx-2" href="">Editar Perfil</a>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-secondary mx-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                              Editar Perfil
+                            </button>
                             <a class="btn btn-danger mx-2" href="">Agregar Vehículo</a>
                         </div>
                 </div>
@@ -48,17 +53,19 @@
                                         <td> {{ car.plate }} </td>
                                         <td> {{ car.brand }} </td>
                                         <td> {{ car.year }} </td>
-                                        <td> {{ car.year }} </td>
+                                        <td> {{ car.mileage }} </td>
                                         <td scope="col">
                                             <div class="col-xl-4 themed-grid-col">
                                                 <a href="#" class="badge text-bg-success text-decoration-none">
-                                                    + Detalles</a>
+                                                    + Detalles
+                                                </a>
                                             </div>
                                         </td>
                                         <td scope="col">
                                             <div class="col-xl-4 themed-grid-col">
                                                 <a href="#" class="badge text-bg-danger text-decoration-none">
-                                                    Eliminar</a>
+                                                    Eliminar
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -70,9 +77,25 @@
         </div>
     </div>
 </div>
-<hr>
-<!--
-nada por aqui!
--->
 
+<hr>
+
+<!-- Vertically centered modal -->
+<div class="modal-dialog modal-dialog-centered modal fade" id="editProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editProfileModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

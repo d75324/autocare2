@@ -13,6 +13,7 @@ class VehicleBE(admin.ModelAdmin):
         'brand',
         'moddel',
         'year',
+        'mileage',
         'color',
         'car_mechanic',
     )

@@ -86,6 +86,7 @@ class Vehicle(models.Model):
     moddel = models.CharField(max_length=50, verbose_name='Modelo')
     year = models.IntegerField(default=current_year, verbose_name='Año de Fabricación')
     color = models.CharField(max_length=50, verbose_name='Color')
+    mileage = models.CharField(max_length=50, verbose_name='Kilometraje')
     car_mechanic = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Mecánico Asignado', related_name='assigned_mechanic')
     created_at = models.DateField(auto_now_add=True, verbose_name='Fecha Creación')
     

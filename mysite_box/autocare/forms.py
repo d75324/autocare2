@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from .models import Vehicle
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from accounts.models import Profile
 
 class LoginForm(AuthenticationForm):
     pass
@@ -31,3 +32,18 @@ class VehicleForm(forms.ModelForm):
         super(VehicleForm, self).__init__(*args, **kwargs)
         # Filtra los usuarios que pertenecen al grupo "Mecánicos" a través del perfil
         self.fields['car_mechanic'].queryset = User.objects.filter(groups__name='Mecanicos')
+
+
+# Formulario para editar la información de los usuarios. Como estoy usando
+# dos tablas, una parte va a impactar en User y otra parte en Profile
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image', 'address', 'location', 'telephone']
+
+

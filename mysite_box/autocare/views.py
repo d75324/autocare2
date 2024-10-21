@@ -3,24 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.views.generic import TemplateView, ListView
 from .models import Vehicle
 from django.views import View
-from .forms import RegisterForm
+from .forms import RegisterForm, ProfileForm, UserForm
 from django.contrib.auth.models import Group
-
-'''
-# custom template view original
-class CustomTemplateView(TemplateView):
-    group_name = None
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                self.group_name = group.name
-        context ['group_name'] = self.group.name
-        return context
-'''
 
 # custom template view
 class CustomTemplateView(TemplateView):
@@ -150,19 +134,7 @@ class RegisterView(View):
         }
         return render(request, 'registration/register.html', data)
 
-'''
-#esta anda:
 # pagina de perfil
-class ProfileView(CustomTemplateView):
-    template_name = 'profile/profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        return context
-'''
-
-# pagina de perfil, otro intento
 class ProfileView(CustomTemplateView):
     template_name = 'profile/profile.html'
     
@@ -182,30 +154,3 @@ class ProfileView(CustomTemplateView):
             context['object_list'] = Vehicle.objects.filter(owner=self.request.user)
         return context
 
-
-'''
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        context['vehicles'] = Vehicle.objects.all()
-        return context
-'''
-
-'''
-# llevar datos del modelo Vehicle a la particular y profesional.html
-def profile_view(request):
-    user = request.user
-    group_name = None
-    if user.is_authenticated:
-        group = Group.objects.filter(user=user).first()
-        if group:
-            group_name = group.name
-    cars = Vehicle.objects.all()
-    return render(request, 'profile/profile.html', {'group_name': group_name, 'cars': cars})
-'''

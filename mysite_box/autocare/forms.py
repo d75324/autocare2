@@ -46,4 +46,9 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['image', 'address', 'location', 'telephone']
 
+# formulario para carga de vehiculos
+class VehicleForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['plate', 'brand', 'moddel', 'year', 'color', 'mileage', 'car_mechanic']
 

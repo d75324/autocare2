@@ -2,7 +2,19 @@
 
     {% block content %}
     <div class="container my-4">
-        <h1 class="text-center">Mis Autos</h1>
+        <h1 class="text-center">Mis Autos</h1><br><hr>
+
+<!-- vehicle_form.html  -->
+    <h2>Crear Vehículo</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+
+
+<br><br><br><br>
+        <hr>
         <ul>
             {% for car in object_list.all %}
             <li>{{ car.brand }} {{ car.plate }} {{ car.year }}</li>

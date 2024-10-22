@@ -37,4 +37,22 @@
           </tr>
         </tbody>
       </table>
+
+      <hr>
+
+
+<!-- vehicle_form.html -->
+    <h2>Crear Vehículo</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+</html>
+      
+      
+
+
+      
+      <hr>
 {% endblock %}

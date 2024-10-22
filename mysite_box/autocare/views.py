@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login
 from django.views.generic import TemplateView, ListView
 from .models import Vehicle
 from django.views import View
-from .forms import RegisterForm, ProfileForm, UserForm
+from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm
 from django.contrib.auth.models import Group
+#from django.contrib.auth.decorators import login_required
+
 
 # custom template view
 class CustomTemplateView(TemplateView):
@@ -20,9 +22,6 @@ class CustomTemplateView(TemplateView):
                 self.group_name = self.group.name
         context['group_name'] = self.group_name
         return context
-
-
-
 
 # pagina de antes de logeuarse
 class CeroView(TemplateView):
@@ -148,9 +147,98 @@ class ProfileView(CustomTemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
         if self.request.user.is_anonymous:
             context['object_list'] = Vehicle.objects.none()
         else:
             context['object_list'] = Vehicle.objects.filter(owner=self.request.user)
+        context ['user_form'] = UserForm(instance=user)
+        context ['profile_form'] = ProfileForm(instance=user.profile)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=user.profile)
 
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            # si todo está ok, redirecciono a la página de perfil actualizada
+            return redirect('profile')
+        
+        #si alguno de los datos no es válido
+        context = self.get_context_data
+        context['user_form'] = user_form
+        context['profile_form'] = profile_form
+        return render(request, 'profile/profile.html', context)
+
+
+'''
+# vista para agregar vehiculos :: vista basada en funciones
+def vehicle_create_view(request):
+    if request.method == "POST":
+        form = VehicleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cars')
+    else:
+        form = VehicleForm()
+    return render(request, 'vehicle_form.html', {'form': form})
+'''
+# vista para agregar vehiculos :: vista basada en clases
+
+class VehicleView(TemplateView):
+    #model = Vehicle
+    template_name = 'cars.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        context['form'] = VehicleForm()
+        context['group_name'] = group_name
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['form'] = VehicleForm()
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        form = VehicleForm(request.POST)
+        if form.is_valid():
+            vehicle = form.save(commit=False)
+            vehicle.owner = request.user
+            vehicle.save()
+            return redirect('profile')
+        context = self.get_context_data()
+        context['form'] = form
+        
+        return self.render_to_response(context)
+    
+
+
+
+'''
+# ¿vista basada en función para guardar los cambios del formulario? NOP
+@login_required
+def create_vehicle(request):
+    if request.method == 'POST':
+        form = VehicleForm(request.POST)
+        if form.is_valid():
+            vehicle = form.save(commit=False)
+            vehicle.owner = request.user
+            vehicle.save()
+            return redirect('home')
+    else:
+        form = VehicleForm()
+
+    return render(request, 'cars.html', {'form': form})
+'''    
+
+    

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User, Group
-from .models import Vehicle
+from .models import Vehicle, Service
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from accounts.models import Profile
 
@@ -51,4 +51,9 @@ class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
         fields = ['plate', 'brand', 'moddel', 'year', 'color', 'mileage', 'car_mechanic']
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['vehicle', 'date', 'kilometers', 'service_type', 'coments', 'cost']
 

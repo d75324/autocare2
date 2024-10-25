@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.views.generic import TemplateView, ListView
 from .models import Vehicle
 from django.views import View
-from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm
+from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm, ServiceForm
 from django.contrib.auth.models import Group
 #from django.contrib.auth.decorators import login_required
 
@@ -174,18 +174,6 @@ class ProfileView(CustomTemplateView):
         return render(request, 'profile/profile.html', context)
 
 
-'''
-# vista para agregar vehiculos :: vista basada en funciones
-def vehicle_create_view(request):
-    if request.method == "POST":
-        form = VehicleForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('cars')
-    else:
-        form = VehicleForm()
-    return render(request, 'vehicle_form.html', {'form': form})
-'''
 # vista para agregar vehiculos :: vista basada en clases
 
 class VehicleView(TemplateView):
@@ -220,25 +208,54 @@ class VehicleView(TemplateView):
         context['form'] = form
         
         return self.render_to_response(context)
+
+class AddServiceView(TemplateView):
+    #model = Service
+    template_name = 'service.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        context['form'] = ServiceForm()
+        context['group_name'] = group_name
+        return context
     
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['form'] = ServiceForm()
+        return self.render_to_response(context)
 
-
-
-'''
-# ¿vista basada en función para guardar los cambios del formulario? NOP
-@login_required
-def create_vehicle(request):
-    if request.method == 'POST':
-        form = VehicleForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = ServiceForm(request.POST)
         if form.is_valid():
-            vehicle = form.save(commit=False)
-            vehicle.owner = request.user
-            vehicle.save()
-            return redirect('home')
-    else:
-        form = VehicleForm()
+            service = form.save(commit=False)
+            service.owner = request.user
+            service.save()
+            return redirect('profile')
+        context = self.get_context_data()
+        context['form'] = form
+        
+        return self.render_to_response(context)
 
-    return render(request, 'cars.html', {'form': form})
-'''    
+# vista del histórico de servicios
 
-    
+class ServicesView(TemplateView):
+    #model = Service
+    template_name = 'servicelist.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        group_name = None
+        if user.is_authenticated:
+            group = Group.objects.filter(user=user).first()
+            if group:
+                group_name = group.name
+        #context['form'] = ServiceForm()
+        context['group_name'] = group_name
+        return context

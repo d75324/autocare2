@@ -56,15 +56,15 @@
                                         <td> {{ car.mileage }} </td>
                                         <td scope="col">
                                             <div class="col-xl-4 themed-grid-col">
-                                                <a href="{% url 'servicelist' %}" class="badge text-bg-success text-decoration-none">
-                                                    + Detalles
+                                                <a href="{% url 'vehicle_detail' car.id %}" class="badge text-bg-success text-decoration-none">
+                                                    Detalles
                                                 </a>
                                             </div>
                                         </td>
                                         <td scope="col">
                                             <div class="col-xl-4 themed-grid-col">
                                                 <a href="{% url 'service' %}" class="badge text-bg-primary text-decoration-none">
-                                                    Servicio
+                                                    + Servicio
                                                 </a>
                                             </div>
                                         </td>
@@ -116,7 +116,7 @@
             <div class="mb-3 mr-2">
               <label for="first_name">Nombre</label>
               <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
-            </div>         
+            </div>
             <div class="mb-3">
               <label for="last_name">Apeyyido</label>
               <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">

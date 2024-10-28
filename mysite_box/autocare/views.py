@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from .models import Vehicle, Service
 from django.views import View
 from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm, ServiceForm
@@ -29,7 +29,7 @@ class PricingView(TemplateView):
     template_name = 'pricing.html'
 
 
-class CarsView(ListView):
+class CarsListView(ListView):
     model = Vehicle
     template_name = 'cars.html'
 
@@ -42,6 +42,7 @@ class CarsView(ListView):
             queryset = queryset.filter(owner=self.request.user)
         return queryset
 
+
 # registro de usuarios
 class RegisterView(View):
 
@@ -50,24 +51,25 @@ class RegisterView(View):
             'form' : RegisterForm()
         }
         return render(request, 'registration/register.html', data)
-    
+
     def post(self, request):
         user_creation_form = RegisterForm(data=request.POST)
         if user_creation_form.is_valid():
             user_creation_form.save()
             user = authenticate(username=user_creation_form.cleaned_data['username'], password=user_creation_form.cleaned_data['password1'])
             login(request, user)
+            request.group
             return redirect('home')
-        
-        data = {
-            'form': user_creation_form
-        }
-        return render(request, 'registration/register.html', data)
+        else:
+            data = {
+                'form': user_creation_form
+            }
+            return render(request, 'registration/register.html', data)
 
 # pagina de perfil
-class ProfileView(CustomTemplateView):
+class ProfileView(TemplateView):
     template_name = 'profile/profile.html'
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
         # if self.request.user.groups.filter(name='Mecanicos').exists():
@@ -75,7 +77,7 @@ class ProfileView(CustomTemplateView):
             return queryset.none()
         else:
             return queryset.filter(owner=self.request.user)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -86,7 +88,7 @@ class ProfileView(CustomTemplateView):
         context ['user_form'] = UserForm(instance=user)
         context ['profile_form'] = ProfileForm(instance=user.profile)
         return context
-    
+
     def post(self, request, *args, **kwargs):
         user = self.request.user
         user_form = UserForm(request.POST, instance=user)
@@ -97,7 +99,7 @@ class ProfileView(CustomTemplateView):
             profile_form.save()
             # si todo está ok, redirecciono a la página de perfil actualizada
             return redirect('profile')
-        
+
         #si alguno de los datos no es válido
         context = self.get_context_data
         context['user_form'] = user_form
@@ -106,8 +108,9 @@ class ProfileView(CustomTemplateView):
 
 # vista para agregar vehiculos :: vista basada en clases
 
-class VehicleView(TemplateView):
-    #model = Vehicle
+
+class VehicleListView(ListView):
+    model = Vehicle
     template_name = 'cars.html'
 
     def get_context_data(self, **kwargs):
@@ -127,10 +130,16 @@ class VehicleView(TemplateView):
             vehicle.owner = request.user
             vehicle.save()
             return redirect('profile')
-        context = self.get_context_data()
-        context['form'] = form
-        
-        return self.render_to_response(context)
+        else:
+            context = self.get_context_data()
+            context['form'] = form
+            return self.render_to_response(context)
+
+
+class VehicleDetailView(DetailView):
+    model = Vehicle
+    template_name = 'vehicle_detail.html'
+
 
 class AddServiceView(TemplateView):
     #model = Service
@@ -155,7 +164,7 @@ class AddServiceView(TemplateView):
             return redirect('profile')
         context = self.get_context_data()
         context['form'] = form
-        
+
         return self.render_to_response(context)
 
 # vista del histórico de servicios - nop!

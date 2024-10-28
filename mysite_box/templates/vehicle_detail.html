@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+    <div class="container my-4">
+        <h1 class="text-center">Detalle de vehículo</h1><br>
+        <dl>
+            <dt>Marca</dt>
+            <dd>{{ vehicle.brand }}</dd>
+            <dt>Patente</dt>
+            <dd>{{ vehicle.plate }}</dd>
+            <dt>Año</dt>
+            <dd>{{ vehicle.year }}</dd>
+        </dl>
+        <hr>
+        <ul>
+            {% for service_for in vehicle.service_set.all %}
+            <li>{{ service_for.date }} | {{ service_for.kilometers }}</li>
+            {% empty %}
+            <li>No hay servicios registrados</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endblock %}

@@ -32,6 +32,12 @@ class Profile(models.Model):
     def get_full_name(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
+    def is_mechanic(self):
+        return self.user.groups.filter(name='Mecanicos').exists()
+
+    def is_particular(self):
+        return self.user.groups.filter(name='Particulares').exists()
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)

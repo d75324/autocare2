@@ -1,7 +1,7 @@
 {% if user.is_authenticated %}
-  {%  if group_name == 'Mecanicos' %}
+  {%  if user.profile.is_mechanic %}
     <header class="p-3 text-bg-dark bg-secondary">
-  {% elif group_name == 'Particulares' %}
+  {% elif user.profile.is_particular %}
     <header class="p-3 text-bg-dark bg-success">
   {% endif %}
 
@@ -17,9 +17,9 @@
 
 
       {% if user.is_authenticated %}
-        {%  if group_name == 'Mecanicos' %}
+        {%  if user.profile.is_mechanic %}
           <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-secondary">
-        {% elif group_name == 'Particulares' %}
+        {% elif user.profile.is_particular %}
           <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 bg-success">
         {% endif %}
     

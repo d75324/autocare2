@@ -27,80 +27,25 @@ class CustomTemplateView(TemplateView):
 class CeroView(TemplateView):
     template_name = 'cero.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context
 
 # pagina de inicio una vez logueado
 class HomeView(TemplateView):
     template_name = 'home.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context
 
 # pagina de Features
 
 class VersionesView(TemplateView):
     template_name = 'versiones.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
 
-# pagina de precios
 class PricingView(TemplateView):
     template_name = 'pricing.html'
 
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
-
 class CarsView(ListView):
     model = Vehicle
     template_name = 'cars.html'
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
-        context['group_name'] = group_name
-        return context    
-
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -181,16 +126,9 @@ class VehicleView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
         context['form'] = VehicleForm()
-        context['group_name'] = group_name
         return context
-    
+
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         context['form'] = VehicleForm()
@@ -214,16 +152,9 @@ class AddServiceView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        group_name = None
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            if group:
-                group_name = group.name
         context['form'] = ServiceForm()
-        context['group_name'] = group_name
         return context
-    
+
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         context['form'] = ServiceForm()
@@ -256,9 +187,6 @@ class ServicesView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            context['group_name'] = group.name if group else None
         context['user_form'] = UserForm(instance=user)
         context['profile_form'] = ProfileForm(instance=user.profile)
         return context
@@ -282,10 +210,6 @@ class VehicleServiceListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            group = Group.objects.filter(user=user).first()
-            context['group_name'] = group.name if group else None
         context['user_form'] = UserForm(instance=user)
         context['profile_form'] = ProfileForm(instance=user.profile)
         return context

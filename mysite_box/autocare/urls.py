@@ -4,7 +4,6 @@ from .views import HomeView, PricingView, CarsView, RegisterView, VersionesView,
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path('cero/', CarsView.as_view(), name='cero'),
     path('pricing/', PricingView.as_view(), name='pricing'),
     path('cars/', VehicleView.as_view(), name='cars'),
     path('register/', RegisterView.as_view(), name='register'),

@@ -8,20 +8,6 @@ from django.contrib.auth.models import Group
 #from django.contrib.auth.decorators import login_required
 
 
-# custom template view
-class CustomTemplateView(TemplateView):
-    group_name = None
-    group = None  # Definir el atributo group
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            self.group = Group.objects.filter(user=user).first()
-            if self.group:
-                self.group_name = self.group.name
-        context['group_name'] = self.group_name
-        return context
 
 # pagina de antes de logeuarse
 class CeroView(TemplateView):

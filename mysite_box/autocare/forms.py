@@ -52,6 +52,8 @@ class VehicleForm(forms.ModelForm):
         model = Vehicle
         fields = ['plate', 'brand', 'moddel', 'year', 'color', 'mileage', 'car_mechanic']
 
+# formulario para agregar vehiculos. Aca necesito que por default la placa sea la del vehiculo en el cual doy click...
+
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service

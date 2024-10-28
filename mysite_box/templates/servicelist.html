@@ -3,8 +3,34 @@
 {% block content %}
 
 <div class="container">
-    <h2>Servicios ya realizados</h2>
-    <p>Este es el listado de los servicios que ya le hizo a su vehiculo</p>
+    <h2>Lista de Vehículos</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Patente</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Año</th>
+                <th scope="col">Kilometraje</th>
+                <!-- <th scope="col">Acciones</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in object_list %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ car.plate }}</td>
+                    <td>{{ car.brand }}</td>
+                    <td>{{ car.year }}</td>
+                    <td>{{ car.mileage }}</td>
+                    <td>
+                        <!--  -->
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+<hr>
 
 {% endblock %}

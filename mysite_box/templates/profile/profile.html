@@ -49,7 +49,7 @@
                             <tbody>
                                 {% for car in object_list.all %}
                                     <tr>
-                                        <th scope="row">1</th>
+                                        <th scope="row"> {{ forloop.counter }} </th>
                                         <td> {{ car.plate }} </td>
                                         <td> {{ car.brand }} </td>
                                         <td> {{ car.year }} </td>

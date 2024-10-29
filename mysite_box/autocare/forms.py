@@ -59,3 +59,12 @@ class ServiceForm(forms.ModelForm):
         model = Service
         fields = ['vehicle', 'date', 'kilometers', 'service_type', 'coments', 'cost']
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ServiceForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['vehicle'].queryset = Vehicle.objects.filter(owner=user)
+        else:
+            self.fields['vehicle'].queryset = Vehicle.objects.none()
+        self.fields['vehicle'].required = True
+        self.fields['vehicle'].empty_label = None

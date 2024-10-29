@@ -150,9 +150,13 @@ class AddServiceView(TemplateView):
         context['form'] = ServiceForm()
         return context
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk, *args, **kwargs):
         context = self.get_context_data()
-        context['form'] = ServiceForm()
+        vehicle = get_object_or_404(Vehicle, pk=pk)
+        context['form'] = ServiceForm(
+            initial={'vehicle': vehicle},
+            user=request.user
+        )
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):

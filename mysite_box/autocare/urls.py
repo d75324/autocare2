@@ -5,7 +5,7 @@ from .views import HomeView, PricingView, CarsListView, RegisterView, VersionesV
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('pricing/', PricingView.as_view(), name='pricing'),
-    path('cars/', CarsListView.as_view(), name='cars'),
+    path('cars/', VehicleListView.as_view(), name='cars'),
     path('vehicles/', VehicleListView.as_view(), name='vehicle_list'),
     path('vehicles/<int:pk>/', VehicleDetailView.as_view(), name='vehicle_detail'),
     path('vehicles/<int:pk>/crear-servicio', AddServiceView.as_view(), name='add_service'),

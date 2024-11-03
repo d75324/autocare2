@@ -1,20 +1,32 @@
 {% extends 'base.html' %}
 
     {% block content %}
+
+    {% load crispy_forms_tags %}
+
     <div class="container my-4">
-        <h1 class="text-center">Mis Autos</h1><br>
-        <p><i>Aque tenemos pendiente un poco de Crispy Forms</i><br>Pero lo importante es que el formulario funciona.</p><hr>
+        <h2 class="text-center">Agregar Vehiculos</h2><br>
+        <h4 class="text-center">Ingrese la información del nuevo vehículo</h4>
+            <p><i>El campo de Matrícula/patente es obligatorio. Podrá elegir el mecánico de su preferencia al final si lo desea. Haga click en este link para invitar a su mecánico de confianza a registrarse</i>
+            </p>
+            <hr>
 
-<!-- vehicle_form.html  -->
-    <h2>Crear Vehículo</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar</button>
-    </form>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 offset-md-4">
+                    <!-- vehicle_form.html  -->
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="btn btn-danger mx-2" type="submit">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
+<hr>
 
-<br><br><br><br>
+        <br><br><br><br>
         <hr>
         <ul>
             {% for car in object_list.all %}

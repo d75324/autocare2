@@ -58,8 +58,8 @@ class RegisterView(View):
             user_creation_form.save()
             user = authenticate(username=user_creation_form.cleaned_data['username'], password=user_creation_form.cleaned_data['password1'])
             login(request, user)
-            request.group
-            return redirect('home')
+            #request.group
+            return redirect('profile')
         else:
             data = {
                 'form': user_creation_form
@@ -108,8 +108,8 @@ class ProfileView(TemplateView):
 
 # vista para agregar vehiculos :: vista basada en clases
 
-
-class VehicleListView(ListView):
+#class VehicleListView(ListView):
+class VehicleListView(TemplateView):
     model = Vehicle
     template_name = 'cars.html'
 
@@ -133,7 +133,8 @@ class VehicleListView(ListView):
         else:
             context = self.get_context_data()
             context['form'] = form
-            return self.render_to_response(context)
+            return self.render_to_response({'form':form})
+            #return self.render_to_response(context)
 
 
 class VehicleDetailView(DetailView):
@@ -158,9 +159,10 @@ class AddServiceView(TemplateView):
             user=request.user
         )
         return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-        form = ServiceForm(request.POST)
+    
+    def post(self, request, pk, *args, **kwargs):
+        vehicle = get_object_or_404(Vehicle, pk=pk)
+        form = ServiceForm(request.POST, user=request.user)  # Paso el usuario al formulario
         if form.is_valid():
             service = form.save(commit=False)
             service.owner = request.user
@@ -168,7 +170,6 @@ class AddServiceView(TemplateView):
             return redirect('profile')
         context = self.get_context_data()
         context['form'] = form
-
         return self.render_to_response(context)
 
 # vista del histórico de servicios - nop!
@@ -192,37 +193,3 @@ class ServicesView(ListView):
 
 class VehicleServiceListView(TemplateView):
     pass
-
-
-'''
-# vista del histórico de servicios - POSTA
-
-class VehicleServiceListView(TemplateView):
-    model = Service
-    template_name = 'vehicle_service_list.html'
-    context_object_name = 'object_list'
-
-    def get_queryset(self):
-        if self.request.user.is_anonymous:
-            return Vehicle.objects.none()
-        return Vehicle.objects.filter(owner=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user_form'] = UserForm(instance=user)
-        context['profile_form'] = ProfileForm(instance=user.profile)
-        return context
-'''
-
-'''
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        plate = self.kwargs['plate']  #('plate')  # traigo la placa?
-        print("Placa recibida OK:", plate) # no lee la placa...
-        vehicle = get_object_or_404(Vehicle, plate=plate)
-        services = Service.objects.filter(vehicle=vehicle)  # filtro el vehiculo
-        context['vehicle'] = vehicle # paso el vehiculo
-        context['services'] = services # paso el servicio
-        return context
-'''

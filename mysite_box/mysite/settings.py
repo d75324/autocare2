@@ -20,10 +20,10 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'accounts.apps.AccountsConfig',
     'autocare',
+
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
@@ -114,3 +114,6 @@ MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = 'home'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'

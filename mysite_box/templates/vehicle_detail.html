@@ -2,7 +2,9 @@
 
     {% block content %}
     <div class="container my-4">
-        <h1 class="text-center">Detalle de vehículo</h1><br>
+        <h1 class="text-center">Lista de servicios realizados al vehículo</h1><br>
+
+        <!--         
         <dl>
             <dt>Marca</dt>
             <dd>{{ vehicle.brand }}</dd>
@@ -24,4 +26,41 @@
             + Servicio
         </a>
     </div>
+        -->
+    <div class="container">
+        <h5>Servicios correspondientes a:<strong> {{ vehicle.plate }} </strong></h5>
+    </div>
+
+    {% for service in vehicle.service_set.all %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Patente</th>
+                <th>Fecha Servicio</th>
+                <th>Kilometraje</th>
+                <th>Costo del Servicio</th>
+                <th>Tipo de Servicio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ vehicle.plate }}</td>
+                <td>{{ service.date }}</td>
+                <td>{{ service.kilometers }}</td>
+                <td>{{ service.cost }}</td>
+                <td>{{ service.service_type }}</td>
+            </tr>
+            <tr>
+                <td colspan="5">{{ service.coments }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% empty %}
+    <p>No hay servicios registrados</p>
+    {% endfor %}
+    <hr>
+    <a href="{% url 'add_service' vehicle.id %}" class="badge text-bg-primary text-decoration-none">
+        + Servicio
+    </a>
+    <!-- <hr style="border: none; height: 5px; background-color: fuchsia; margin: 20px 0;"> -->
     {% endblock %}

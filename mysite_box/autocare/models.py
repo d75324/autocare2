@@ -84,7 +84,7 @@ class Vehicle(models.Model):
     plate = models.CharField(max_length=10, verbose_name='Patente')
     brand = models.CharField(max_length=50, choices=BRAND_CHOICES, verbose_name='Marca')
     moddel = models.CharField(max_length=50, verbose_name='Modelo')
-    year = models.IntegerField(default=current_year, verbose_name='Año de Fabricación')
+    year = models.IntegerField(default=current_year, verbose_name='Año')
     color = models.CharField(max_length=50, verbose_name='Color')
     mileage = models.CharField(max_length=50, verbose_name='Kilometraje')
     car_mechanic = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Mecánico Asignado', related_name='assigned_mechanic')

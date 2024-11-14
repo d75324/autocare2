@@ -5,9 +5,8 @@ from .models import Vehicle, Service
 from django.views import View
 from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm, ServiceForm
 from django.contrib.auth.models import Group
-#from django.contrib.auth.decorators import login_required
-
-
+from django.urls import reverse_lazy
+from django.views.generic.edit import DeleteView
 
 # pagina de antes de logeuarse
 class CeroView(TemplateView):
@@ -193,3 +192,13 @@ class ServicesView(ListView):
 
 class VehicleServiceListView(TemplateView):
     pass
+
+class VehicleDeleteView(DeleteView):
+    model = Vehicle
+    template_name = 'vehicle_confirm_delete.html'
+    success_url = reverse_lazy('vehicle_list')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.service_set.all().delete()  # Borrar también los servicios asociados
+        return super().delete(request, *args, **kwargs)

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, PricingView, CarsListView, RegisterView, VersionesView, CeroView, ProfileView, VehicleListView, AddServiceView, ServicesView, VehicleServiceListView, VehicleDetailView
+from .views import HomeView, PricingView, CarsListView, RegisterView, VersionesView, CeroView, ProfileView, VehicleListView, AddServiceView, ServicesView, VehicleServiceListView, VehicleDetailView, VehicleDeleteView
 #, profile_view
 
 urlpatterns = [
@@ -13,7 +13,5 @@ urlpatterns = [
     path('versiones/', VersionesView.as_view(), name='versiones'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('servicelist/', ServicesView.as_view(), name='servicelist'),
-    #path('vehicle/<str:plate>/services/', VehicleServiceListView.as_view(), name='vehicle_service_list'),
-    #path('create_vehicle/', create_vehicle, name='create_vehicle'),
-
+    path('vehicles/<int:pk>/delete/', VehicleDeleteView.as_view(), name='vehicle_delete'),
 ]

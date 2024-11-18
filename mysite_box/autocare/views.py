@@ -163,14 +163,15 @@ class AddServiceView(TemplateView):
 # vista del histórico de servicios - nop!
 
 class ServicesView(ListView):
-    model = Vehicle
+    model = Service
     template_name = 'servicelist.html'
     context_object_name = 'object_list'
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
-            return Vehicle.objects.none()
-        return Vehicle.objects.filter(owner=self.request.user)
+            return Service.objects.none()
+        else:
+            return Service.objects.filter(vehicle__owner=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

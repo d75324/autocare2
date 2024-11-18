@@ -3,29 +3,27 @@
 {% block content %}
 
 <div class="container">
-    <h2>Lista de Vehículos</h2>
+    <h2>Lista de Servicios</h2>
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Patente</th>
-                <th scope="col">Marca</th>
-                <th scope="col">Año</th>
                 <th scope="col">Kilometraje</th>
-                <!-- <th scope="col">Acciones</th> -->
+                <th scope="col">Fecha</th>
+                <th scope="col">Comentarios</th>
+                <th scope="col">Costo</th>
             </tr>
         </thead>
         <tbody>
-            {% for car in object_list %}
+            {% for service_for in object_list %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ car.plate }}</td>
-                    <td>{{ car.brand }}</td>
-                    <td>{{ car.year }}</td>
-                    <td>{{ car.mileage }}</td>
-                    <td>
-                        <!--  -->
-                    </td>
+                    <td><a href="{% url 'vehicle_detail' service_for.vehicle.id %}">{{ service_for.vehicle.plate }}</a></td>
+                    <td>{{ service_for.kilometers }}</td>
+                    <td>{{ service_for.date }}</td>
+                    <td>{{ service_for.coments }}</td>
+                    <td>{{ service_for.cost }}</td>
                 </tr>
             {% endfor %}
         </tbody>

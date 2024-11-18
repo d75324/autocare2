@@ -28,20 +28,6 @@ class PricingView(TemplateView):
     template_name = 'pricing.html'
 
 
-class CarsListView(ListView):
-    model = Vehicle
-    template_name = 'cars.html'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # if self.request.user.groups.filter(name='Mecanicos').exists():
-        if self.request.user.is_anonymous:
-            return queryset.none()
-        else:
-            queryset = queryset.filter(owner=self.request.user)
-        return queryset
-
-
 # registro de usuarios
 class RegisterView(View):
 
@@ -108,7 +94,7 @@ class ProfileView(TemplateView):
 # vista para agregar vehiculos :: vista basada en clases
 
 #class VehicleListView(ListView):
-class VehicleListView(TemplateView):
+class VehicleListView(ListView):
     model = Vehicle
     template_name = 'cars.html'
 
@@ -117,10 +103,13 @@ class VehicleListView(TemplateView):
         context['form'] = VehicleForm()
         return context
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
-        context['form'] = VehicleForm()
-        return self.render_to_response(context)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # if self.request.user.groups.filter(name='Mecanicos').exists():
+        if self.request.user.is_anonymous:
+            return queryset.none()
+        else:
+            return queryset.filter(owner=self.request.user)
 
     def post(self, request, *args, **kwargs):
         form = VehicleForm(request.POST)
@@ -158,7 +147,7 @@ class AddServiceView(TemplateView):
             user=request.user
         )
         return self.render_to_response(context)
-    
+
     def post(self, request, pk, *args, **kwargs):
         vehicle = get_object_or_404(Vehicle, pk=pk)
         form = ServiceForm(request.POST, user=request.user)  # Paso el usuario al formulario

@@ -24,7 +24,7 @@
                             <button type="button" class="btn btn-outline-secondary mx-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                               Editar Perfil
                             </button>
-                            <a class="btn btn-danger mx-2" href="{% url 'cars' %}">Agregar Vehículo</a>
+                            <a class="btn btn-danger mx-2" href="{% url 'vehicle_list' %}">Agregar Vehículo</a>
                         </div>
                 </div>
              </div>
@@ -34,51 +34,7 @@
                 <div class="card-body">
                     <h3>Tus vehículos registrados:</h3>
                     <br>
-                        <table class="table table-hover">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Patente</th>
-                                <th scope="col">Marca</th>
-                                <th scope="col">Año</th>
-                                <th scope="col">Kilometros</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                {% for car in object_list.all %}
-                                    <tr>
-                                        <th scope="row"> {{ forloop.counter }} </th>
-                                        <td> {{ car.plate }} </td>
-                                        <td> {{ car.brand }} </td>
-                                        <td> {{ car.year }} </td>
-                                        <td> {{ car.mileage }} </td>
-                                        <td scope="col">
-                                            <div class="col-xl-4 themed-grid-col">
-                                                <a href="{% url 'vehicle_detail' %}" class="badge text-bg-success text-decoration-none">
-                                                    Detalles
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td scope="col">
-                                            <div class="col-xl-4 themed-grid-col">
-                                                <a href="{% url 'add_service' car.id %}" class="badge text-bg-primary text-decoration-none">
-                                                    + Servicio
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td scope="col">
-                                          <div class="col-xl-4 themed-grid-col">
-                                              <a href="{% 'vehicle_delete' car.id %}" class="badge text-bg-danger text-decoration-none">
-                                                  Eliminar
-                                              </a>
-                                          </div>
-                                      </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    {% include 'includes/_vehicles_table.html' %}
                 </div>
              </div>
         </div>

@@ -1,4 +1,5 @@
 .env
 *.pyc
+**/*.pyc
 mysite_box/media/*
 .vscode

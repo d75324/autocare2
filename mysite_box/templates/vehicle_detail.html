@@ -4,7 +4,7 @@
     <div class="container my-4">
         <h1 class="text-center">Lista de servicios realizados al vehículo</h1><br>
 
-        <!--         
+        <!--
         <dl>
             <dt>Marca</dt>
             <dd>{{ vehicle.brand }}</dd>
@@ -31,7 +31,6 @@
         <h5>Servicios correspondientes a:<strong> {{ vehicle.plate }} </strong></h5>
     </div>
 
-    {% for service in vehicle.service_set.all %}
     <table class="table">
         <thead>
             <tr>
@@ -43,6 +42,7 @@
             </tr>
         </thead>
         <tbody>
+        {% for service in vehicle.service_set.all %}
             <tr>
                 <td>{{ vehicle.plate }}</td>
                 <td>{{ service.date }}</td>
@@ -53,11 +53,13 @@
             <tr>
                 <td colspan="5">{{ service.coments }}</td>
             </tr>
+            {% empty %}
+            <tr>
+                No hay servicios registrados
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
-    {% empty %}
-    <p>No hay servicios registrados</p>
-    {% endfor %}
     <hr>
     <a href="{% url 'add_service' vehicle.id %}" class="badge text-bg-primary text-decoration-none">
         + Servicio

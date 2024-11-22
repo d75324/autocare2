@@ -12,21 +12,16 @@ from django.views.generic.edit import DeleteView
 class CeroView(TemplateView):
     template_name = 'cero.html'
 
-
 # pagina de inicio una vez logueado
 class HomeView(TemplateView):
     template_name = 'home.html'
 
-
 # pagina de Features
-
 class VersionesView(TemplateView):
     template_name = 'versiones.html'
 
-
 class PricingView(TemplateView):
     template_name = 'pricing.html'
-
 
 # registro de usuarios
 class RegisterView(View):
@@ -92,7 +87,6 @@ class ProfileView(TemplateView):
         return render(request, 'profile/profile.html', context)
 
 # vista para agregar vehiculos :: vista basada en clases
-
 #class VehicleListView(ListView):
 class VehicleListView(ListView):
     model = Vehicle
@@ -124,11 +118,9 @@ class VehicleListView(ListView):
             return self.render_to_response({'form':form})
             #return self.render_to_response(context)
 
-
 class VehicleDetailView(DetailView):
     model = Vehicle
     template_name = 'vehicle_detail.html'
-
 
 class AddServiceView(TemplateView):
     #model = Service
@@ -161,7 +153,6 @@ class AddServiceView(TemplateView):
         return self.render_to_response(context)
 
 # vista del histórico de servicios - nop!
-
 class ServicesView(ListView):
     model = Service
     template_name = 'servicelist.html'
@@ -186,7 +177,7 @@ class VehicleServiceListView(TemplateView):
 class VehicleDeleteView(DeleteView):
     model = Vehicle
     template_name = 'vehicle_confirm_delete.html'
-    success_url = reverse_lazy('vehicle_list')
+    success_url = reverse_lazy('profile')
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

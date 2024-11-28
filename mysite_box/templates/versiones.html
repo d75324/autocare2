@@ -8,7 +8,30 @@
              <div class="card border rounded-2 shadow p-3 mb-3">
                 <div class="card-body">
 
-                    <p>nada por aqui</p>
+                    <p>
+                        Pendientes
+                    </p>
+
+                    <div class="col-md-8 offset-md-2">
+                        <h3>Tus vehículos registrados: {{ cantidad_vehiculos }}</h3>
+                        <br>
+                        {% include 'includes/_vehicles_table.html' %}
+                    </div>
+                    
+                    <p>filtrar mecanicos</p><hr><hr>
+
+                    <div class="container my-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="card border rounded-2 shadow p-3 mb-3">
+            <div class="card-body">
+                <h3>Tus vehículos registrados: {{ cantidad_vehiculos }}</h3>
+                <br>
+                {% include 'includes/_vehicles_table.html' %}
+            </div>
+         </div>
+    </div>
+</div>
+
 
                 </div>
              </div>

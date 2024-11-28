@@ -7,8 +7,10 @@ from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm, ServiceForm
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
+from django.contrib.auth.views import LoginView
+from autocare.forms import LoginForm
 
-# pagina de antes de logeuarse
+# pagina de antes de loguearse
 class CeroView(TemplateView):
     template_name = 'cero.html'
 
@@ -35,11 +37,11 @@ class RegisterView(View):
     def post(self, request):
         user_creation_form = RegisterForm(data=request.POST)
         if user_creation_form.is_valid():
-            user_creation_form.save()
-            user = authenticate(username=user_creation_form.cleaned_data['username'], password=user_creation_form.cleaned_data['password1'])
-            login(request, user)
-            #request.group
-            return redirect('profile')
+            user = user_creation_form.save()
+            user = authenticate(username=user.email, password=request.POST['password1'])
+            if user is not None:
+                login(request, user)
+                return redirect('profile')
         else:
             data = {
                 'form': user_creation_form
@@ -65,6 +67,8 @@ class ProfileView(TemplateView):
             context['object_list'] = Vehicle.objects.none()
         else:
             context['object_list'] = Vehicle.objects.filter(owner=self.request.user)
+            #para contar la cantidad de vehiculos, simplemente cuento la cantidad de object_list de la linea anterior:
+            context['cantidad_vehiculos'] = context['object_list'].count() 
         context ['user_form'] = UserForm(instance=user)
         context ['profile_form'] = ProfileForm(instance=user.profile)
         return context
@@ -86,7 +90,6 @@ class ProfileView(TemplateView):
         context['profile_form'] = profile_form
         return render(request, 'profile/profile.html', context)
 
-# vista para agregar vehiculos :: vista basada en clases
 #class VehicleListView(ListView):
 class VehicleListView(ListView):
     model = Vehicle
@@ -95,6 +98,7 @@ class VehicleListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = VehicleForm()
+        context['cantidad_vehiculos'] = self.get_queryset().count()
         return context
 
     def get_queryset(self):
@@ -117,6 +121,14 @@ class VehicleListView(ListView):
             context['form'] = form
             return self.render_to_response({'form':form})
             #return self.render_to_response(context)
+
+'''
+def lista_vehiculos(request):
+    vehiculos = Vehicle.objects.all()
+    cantidad_vehiculos = vehiculos.count()  # cuento la cantidad de vehículos
+    return render(request, 'versiones.html', {'cantidad_vehiculos': cantidad_vehiculos})
+'''    
+
 
 class VehicleDetailView(DetailView):
     model = Vehicle
@@ -183,3 +195,7 @@ class VehicleDeleteView(DeleteView):
         self.object = self.get_object()
         self.object.service_set.all().delete()  # Borrar también los servicios asociados
         return super().delete(request, *args, **kwargs)
+
+class CustomLoginView(LoginView):
+    form_class = LoginForm
+    template_name = 'registration/login.html'

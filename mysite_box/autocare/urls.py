@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import HomeView, PricingView, RegisterView, VersionesView, CeroView, ProfileView, VehicleListView, AddServiceView, ServicesView, VehicleServiceListView, VehicleDetailView, VehicleDeleteView
-#, profile_view
+from autocare.views import CustomLoginView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('servicelist/', ServicesView.as_view(), name='servicelist'),
     path('vehicles/<int:pk>/delete/', VehicleDeleteView.as_view(), name='vehicle_delete'),
+    path('login/', CustomLoginView.as_view(), name='login'),
 ]

@@ -13,7 +13,6 @@
                     <h3> {{ user.first_name }} {{ user.last_name }} </h3>
                     <h5> {{ group_name }} </h5>
                     <hr>
-                    <p><strong>Nombre del Usuario:</strong> {{ user.username }} </p>
                     <p><strong>Correo Electrónico: </strong> {{ user.email }} </p>
                     <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
                     <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
@@ -32,7 +31,10 @@
         <div class="col-md-8">
              <div class="card border rounded-2 shadow p-3 mb-3">
                 <div class="card-body">
-                    <h3>Tus vehículos registrados:</h3>
+                  <h3>Tus vehículos registrados</h3>
+                  <p>La cantidad total de vehículos registrados es:
+                    <strong> {{ cantidad_vehiculos }} </strong></p>
+                    <hr>
                     <br>
                     {% include 'includes/_vehicles_table.html' %}
                 </div>

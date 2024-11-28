@@ -5,23 +5,38 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from accounts.models import Profile
 
 class LoginForm(AuthenticationForm):
-    pass
+    username = forms.EmailField(label='Correo Electrónico')
+    
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise forms.ValidationError('Esta cuenta está inactiva.', code='inactive')
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(label='Correo Electronico')
+    email = forms.EmailField(label='Correo Electrónico')
     first_name = forms.CharField(label='Nombre')
     last_name = forms.CharField(label='Apellido')
+    group = forms.ModelChoiceField(queryset=Group.objects.filter(name__in=['Mecanicos', 'Particulares']), initial=Group.objects.get(name='Particulares'), required=True, label='Tipo de Uso: ')
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+        fields = ['email', 'first_name', 'last_name', 'password1', 'password2']
     
     def clean_email(self):
         email_field = self.cleaned_data['email']
-
         if User.objects.filter(email=email_field).exists():
             raise forms.ValidationError('Este correo electrónico ya se encuentra registrado')
         return email_field
+
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save(commit=False)
+        user.username = self.cleaned_data['email']
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+            group = self.cleaned_data['group']
+            user.groups.add(group)
+        return user
+
 
 class VehicleForm(forms.ModelForm):
     class Meta:
@@ -32,7 +47,6 @@ class VehicleForm(forms.ModelForm):
         super(VehicleForm, self).__init__(*args, **kwargs)
         # Filtra los usuarios que pertenecen al grupo "Mecánicos" a través del perfil
         self.fields['car_mechanic'].queryset = User.objects.filter(groups__name='Mecanicos')
-
 
 # Formulario para editar la información de los usuarios. Como estoy usando
 # dos tablas, una parte va a impactar en User y otra parte en Profile

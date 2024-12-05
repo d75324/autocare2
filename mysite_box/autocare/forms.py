@@ -45,8 +45,21 @@ class VehicleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VehicleForm, self).__init__(*args, **kwargs)
-        # Filtra los usuarios que pertenecen al grupo "Mecánicos" a través del perfil
         self.fields['car_mechanic'].queryset = User.objects.filter(groups__name='Mecanicos')
+
+'''
+class VehicleForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['plate', 'brand', 'moddel', 'year', 'color', 'mileage', 'car_mechanic']
+
+    def __init__(self, *args, **kwargs):
+        super(VehicleForm, self).__init__(*args, **kwargs)
+        mecanicos_group = Group.objects.get(name='Mecanicos')
+        self.fields['car_mechanic'].queryset = User.objects.filter(groups=mecanicos_group)
+'''
+
+
 
 # Formulario para editar la información de los usuarios. Como estoy usando
 # dos tablas, una parte va a impactar en User y otra parte en Profile
@@ -65,6 +78,16 @@ class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
         fields = ['plate', 'brand', 'moddel', 'year', 'color', 'mileage', 'car_mechanic']
+    
+    def __init__(self, *args, **kwargs):
+        super(VehicleForm, self).__init__(*args, **kwargs)
+        try:
+            mecanicos_group = Group.objects.get(name='Mecanicos')
+            mecanicos = User.objects.filter(groups=mecanicos_group)
+            self.fields['car_mechanic'].queryset = mecanicos
+            self.fields['car_mechanic'].label_from_instance = lambda obj: f"{obj.first_name} {obj.last_name}"
+        except Group.DoesNotExist:
+            self.fields['car_mechanic'].queryset = User.objects.none()
 
 # formulario para agregar vehiculos. Aca necesito que por default la placa sea la del vehiculo en el cual doy click...
 

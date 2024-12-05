@@ -3,8 +3,8 @@
         <tr>
         <th scope="col">#</th>
         <th scope="col">Patente</th>
-        <th scope="col">Marca</th>
-        <th scope="col">Año</th>
+        <th scope="col">Marca/Año</th>
+        <th scope="col">Gastos</th>
         <th scope="col">Kilometros</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -15,8 +15,8 @@
             <tr>
                 <th scope="row"> {{ forloop.counter }} </th>
                 <td> {{ car.plate }} </td>
-                <td> {{ car.brand }} </td>
-                <td> {{ car.year }} </td>
+                <td> {{ car.brand }} / {{ car.year }} </td>
+                <td> ${{ car.total_service_cost }} </td>
                 <td> {{ car.mileage }} </td>
                 <td scope="col">
                     <div class="col-xl-4 themed-grid-col">

@@ -94,6 +94,37 @@ class ProfileView(TemplateView):
 class VehicleListView(ListView):
     model = Vehicle
     template_name = 'cars.html'
+    context_object_name = 'vehicles'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['form'] = VehicleForm()
+        if user.is_anonymous:
+            context['object_list'] = Vehicle.objects.none()
+            context['cantidad_vehiculos'] = 0
+        else:
+            user_vehicles = Vehicle.objects.filter(owner=self.request.user)
+            context['object_list'] = user_vehicles
+            context['cantidad_vehiculos'] = user_vehicles.count()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = VehicleForm(request.POST)
+        if form.is_valid():
+            vehicle = form.save(commit=False)
+            vehicle.owner = request.user
+            vehicle.save()
+            return redirect('profile')
+        else:
+            context = self.get_context_data()
+            context['form'] = form
+            return self.render_to_response(context)
+        
+'''
+class VehicleListView(ListView):
+    model = Vehicle
+    template_name = 'cars.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -121,6 +152,7 @@ class VehicleListView(ListView):
             context['form'] = form
             return self.render_to_response({'form':form})
             #return self.render_to_response(context)
+'''
 
 '''
 def lista_vehiculos(request):
@@ -134,6 +166,12 @@ class VehicleDetailView(DetailView):
     model = Vehicle
     template_name = 'vehicle_detail.html'
 
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs) 
+        vehicle = self.get_object() 
+        context['total_cost'] = vehicle.total_service_cost() 
+        return context
+
 class AddServiceView(TemplateView):
     #model = Service
     template_name = 'service.html'
@@ -146,8 +184,11 @@ class AddServiceView(TemplateView):
     def get(self, request, pk, *args, **kwargs):
         context = self.get_context_data()
         vehicle = get_object_or_404(Vehicle, pk=pk)
+        last_service = Service.objects.filter(vehicle=vehicle).order_by('-date').first() # ultimo kilometraje
+        initial_kilometers = last_service.kilometers if last_service else vehicle.mileage
+
         context['form'] = ServiceForm(
-            initial={'vehicle': vehicle},
+            initial={'vehicle': vehicle, 'kilometers': initial_kilometers},
             user=request.user
         )
         return self.render_to_response(context)
@@ -159,6 +200,9 @@ class AddServiceView(TemplateView):
             service = form.save(commit=False)
             service.owner = request.user
             service.save()
+            # voy a actualizar el kilometraje del vehículo y después lo guardo
+            vehicle.mileage = service.kilometers
+            vehicle.save() # guardado!
             return redirect('profile')
         context = self.get_context_data()
         context['form'] = form

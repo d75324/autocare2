@@ -1,43 +1,32 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<hr>
 <div class="container my-3">
     <div class="row">
         <div class="col-md-10 mx-auto">
              <div class="card border rounded-2 shadow p-3 mb-3">
                 <div class="card-body">
 
-                    <p>
-                        Pendientes
+                    <p> <h4>Comming up...</h4>
+                        Pendientes<br>
+                        - El mecánico se debe poder filtrar por nombre, no por nombre de usuario
+                        - Las matrículas aparecen en mayúsculas, aunque el usuario las escriba en minúsculas.
+                        - Filtrar mecánicos cuando agrego un nuevo vehiculo. <br>
+                        - cuando cargo un nuevo servicio en un auto, tengo que tomar el kilometraje que ya tiene el auto y solamente darle la opción de aumentar el número que se ingresa.<br>
+                        - agregar en Detalles, el total del costo del auto desde que se creó el registro.<br>
+                        - deshabilitar botón vehiculos cuando el usuario Particular tiene registrados los 3 vehiculos que le permite la aplicación.<br>
+                        - emprolijar la hoja Precios<br>
+                        - emprolijar el home!<br>
                     </p>
-
-                    <div class="col-md-8 offset-md-2">
-                        <h3>Tus vehículos registrados: {{ cantidad_vehiculos }}</h3>
-                        <br>
-                        {% include 'includes/_vehicles_table.html' %}
-                    </div>
-                    
-                    <p>filtrar mecanicos</p><hr><hr>
-
-                    <div class="container my-4">
-    <div class="col-md-8 offset-md-2">
-        <div class="card border rounded-2 shadow p-3 mb-3">
-            <div class="card-body">
-                <h3>Tus vehículos registrados: {{ cantidad_vehiculos }}</h3>
-                <br>
-                {% include 'includes/_vehicles_table.html' %}
-            </div>
-         </div>
-    </div>
-</div>
-
-
+                    <hr>
+                    <p> <h4>Version 0</h4>
+                        Completado<br>
+                        - El Usuario puede eliminar autos registrados en su cuenta y a su nombre (por ejemplo si vendo el auto)<br>
+                        - Contar la cantidad de vehiculos que tiene registrados el usuario, para usar en la función de deshabilitación del botón de Agregar Vehiculos.<br>
+                    </p>
                 </div>
              </div>
         </div>
 
     </div>
 </div>
-<hr>
 {% endblock %}

@@ -86,12 +86,20 @@ class Vehicle(models.Model):
     moddel = models.CharField(max_length=50, verbose_name='Modelo')
     year = models.IntegerField(default=current_year, verbose_name='Año')
     color = models.CharField(max_length=50, verbose_name='Color')
-    mileage = models.CharField(max_length=50, verbose_name='Kilometraje')
+    mileage = models.IntegerField(verbose_name='Kilometraje')
     car_mechanic = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Mecánico Asignado', related_name='assigned_mechanic')
     created_at = models.DateField(auto_now_add=True, verbose_name='Fecha Creación')
     
     def __str__(self):
         return self.plate
+    
+    def save(self, *args, **kwargs):
+        self.plate = self.plate.upper()
+        super().save(*args, **kwargs)
+
+    def total_service_cost(self):
+        from django.db.models import Sum
+        return self.service_set.aggregate(total_cost=Sum('cost'))['total_cost'] or 0
 
 
 # listamos los servicios que puede recibir el vehiculo
@@ -110,3 +118,6 @@ class Service(models.Model):
 
     def __str__(self):
         return self.service_type
+    
+    def total_service_cost(self):
+        return self.service_set.aggregate(total_cost=models.Sum('cost'))['total_cost'] or 0

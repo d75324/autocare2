@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from .models import Vehicle, Service
 from django.views import View
 from .forms import RegisterForm, ProfileForm, UserForm, VehicleForm, ServiceForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.views import LoginView
@@ -14,9 +14,29 @@ from autocare.forms import LoginForm
 class CeroView(TemplateView):
     template_name = 'cero.html'
 
-# pagina de inicio una vez logueado
+# pagina de inicio, sin loguearse
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+'''
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # total de vehículos registrados
+        context['total_vehicles'] = Vehicle.objects.count()
+        
+        # total de usuarios en el grupo 'Mecanicos'
+        mecanicos_group = Group.objects.get(name='Mecanicos')
+        context['total_mecanicos'] = User.objects.filter(groups=mecanicos_group).count()
+        
+        # total de usuarios en el grupo 'Particular'
+        particular_group = Group.objects.get(name='Particular')
+        context['total_particulares'] = User.objects.filter(groups=particular_group).count()
+
+        return context
+'''
+
+
 
 # pagina de Features
 class VersionesView(TemplateView):
@@ -100,13 +120,26 @@ class VehicleListView(ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['form'] = VehicleForm()
+        # pruebo inicializar assigned_vehicles para que el template lo tome
+        context['assigned_vehicles'] = Vehicle.objects.none()
+
         if user.is_anonymous:
             context['object_list'] = Vehicle.objects.none()
             context['cantidad_vehiculos'] = 0
         else:
-            user_vehicles = Vehicle.objects.filter(owner=self.request.user)
+            user_vehicles = Vehicle.objects.filter(owner=user)
             context['object_list'] = user_vehicles
             context['cantidad_vehiculos'] = user_vehicles.count()
+            
+            # Vehículos asignados al mecánico
+            if user.profile.is_mechanic:
+                assigned_vehicles = Vehicle.objects.filter(car_mechanic=user)
+                print("query de vehiculos asignados: ", assigned_vehicles)
+                print("usuario: ", user)
+                print("contador de vehiculos asignados: ", assigned_vehicles.count())
+                context['assigned_vehicles'] = assigned_vehicles
+        
+        print("Context: ", context) # Imprimir el contexto para comprobar su contenido
         return context
 
     def post(self, request, *args, **kwargs):
@@ -178,7 +211,7 @@ class AddServiceView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ServiceForm()
+        context['form'] = ServiceForm(user=self.request.user)
         return context
 
     def get(self, request, pk, *args, **kwargs):
@@ -237,9 +270,31 @@ class VehicleDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.service_set.all().delete()  # Borrar también los servicios asociados
+        self.object.service_set.all().delete()  # acá se borran también los servicios asociados
         return super().delete(request, *args, **kwargs)
 
 class CustomLoginView(LoginView):
     form_class = LoginForm
     template_name = 'registration/login.html'
+
+'''
+def monitor_view(request):
+    # cuento los vehículos registrados
+    total_vehicles = Vehicle.objects.count()
+    
+    # cuento los usuarios en el grupo "Mecanicos"
+    mecanicos_group = Group.objects.get(name='Mecanicos')
+    total_mecanicos = User.objects.filter(groups=mecanicos_group).count()
+    
+    # cuento los usuarios en el grupo "Particular"
+    particular_group = Group.objects.get(name='Particular')
+    total_particulares = User.objects.filter(groups=particular_group).count()
+    
+    context = {
+        'total_vehicles': total_vehicles,
+        'total_mecanicos': total_mecanicos,
+        'total_particulares': total_particulares,
+    }
+    return render(request, 'home.html', context)
+
+'''

@@ -59,8 +59,6 @@ class VehicleForm(forms.ModelForm):
         self.fields['car_mechanic'].queryset = User.objects.filter(groups=mecanicos_group)
 '''
 
-
-
 # Formulario para editar la información de los usuarios. Como estoy usando
 # dos tablas, una parte va a impactar en User y otra parte en Profile
 class UserForm(forms.ModelForm):
@@ -85,7 +83,7 @@ class VehicleForm(forms.ModelForm):
             mecanicos_group = Group.objects.get(name='Mecanicos')
             mecanicos = User.objects.filter(groups=mecanicos_group)
             self.fields['car_mechanic'].queryset = mecanicos
-            self.fields['car_mechanic'].label_from_instance = lambda obj: f"{obj.first_name} {obj.last_name}"
+            self.fields['car_mechanic'].label_from_instance = lambda obj: f"{obj.first_name} {obj.last_name} # {obj.email}"
         except Group.DoesNotExist:
             self.fields['car_mechanic'].queryset = User.objects.none()
 
@@ -101,6 +99,8 @@ class ServiceForm(forms.ModelForm):
         super(ServiceForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['vehicle'].queryset = Vehicle.objects.filter(owner=user)
+            # Inicializa el campo 'coments' con el nombre del usuario
+            self.fields['coments'].initial = f"Autor: {user.get_full_name()}"
         else:
             self.fields['vehicle'].queryset = Vehicle.objects.none()
         self.fields['vehicle'].required = True

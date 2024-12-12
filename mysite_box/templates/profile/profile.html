@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-
 {% block content %}
+
 <hr>
 <div class="container my-3">
     <div class="row">
@@ -8,44 +8,88 @@
             <!-- car datos del usuario, personal o profesional-->
              <div class="card border rounded-2 shadow p-3 mb-3">
                 <div class="card-body">
-                    <!--card body...-->
-                    <img class="img-thumbnail rounded-circle mb-3" src=" {{ user.profile.image.url }} " alt="{{ user.username }}" style="width: 100px;">
-                    <h3> {{ user.first_name }} {{ user.last_name }} </h3>
-                    <h5> {{ group_name }} </h5>
-                    <hr>
-                    <p><strong>Correo Electrónico: </strong> {{ user.email }} </p>
-                    <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
-                    <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
-                    <p><strong>Ciudad: </strong> {{ user.profile.location }} </p>
-                    <hr>
-                        <div class="d-flex justify-content-center my-3">
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-outline-secondary mx-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                              Editar Perfil
-                            </button>
-                            {% if cantidad_vehiculos < 3 %}
-                            <a class="btn btn-danger mx-2" href="{% url 'vehicle_list' %}">Agregar Vehículo</a>
-                            {% else %}
-                            <a class="btn btn-danger mx-2 disabled" href="#">Agregar Vehículo</a>
-                            {% endif %}
-                        </div>
-                </div>
+                  <!--card body...-->
+                  <img class="img-thumbnail rounded-circle mb-3" src=" {{ user.profile.image.url }} " alt="{{ user.username }}" style="width: 100px;">
+                  <h3> {{ user.first_name }} {{ user.last_name }} </h3>
+                  <h5> {{ group_name }} </h5>
+                  <hr>
+                  <p><strong>Correo Electrónico: </strong> {{ user.email }} </p>
+                  <p><strong>Teléfono: </strong> {{ user.profile.telephone }} </p>
+                  <p><strong>Domicilio: </strong> {{ user.profile.address }} </p>
+                  <p><strong>Ciudad: </strong> {{ user.profile.location }} </p>
+                  <hr>
+                      <div class="d-flex justify-content-center my-3">
+                          <!-- Button trigger modal -->
+                          <button type="button" class="btn btn-outline-secondary mx-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            Editar Perfil
+                          </button>
+                          {% if cantidad_vehiculos < 3 %}
+                          <a class="btn btn-danger mx-2" href="{% url 'vehicle_list' %}">Agregar Vehículo</a>
+                          {% else %}
+                          <a class="btn btn-danger mx-2 disabled" href="#">Agregar Vehículo</a>
+                          {% endif %}
+                      </div>
+              </div>
              </div>
         </div>
-        <div class="col-md-8">
-             <div class="card border rounded-2 shadow p-3 mb-3">
-                <div class="card-body">
-                  <h3>Tus vehículos registrados</h3>
-                  <p>La cantidad total de vehículos registrados es:
-                    <strong> {{ cantidad_vehiculos }} </strong></p>
-                    <hr>
-                    <br>
-                    {% include 'includes/_vehicles_table.html' %}
-                </div>
-             </div>
+          <div class="col-md-8">
+                  <div class="card border rounded-2 shadow p-3 mb-3">
+                    <div class="card-body">
+                      <h3>Tus vehículos registrados</h3>
+                      <p>La cantidad total de vehículos registrados es:
+                        <strong> {{ cantidad_vehiculos }} </strong></p>
+                        <hr>
+                        <br>
+                        {% include 'includes/_vehicles_table.html' %}
+                    </div>
+                  </div>
+          </div>
+        <hr>
+
+        {% if user.profile.is_mechanic %}
+        <div class="card border rounded-2 shadow p-3 mb-3 mt-4">
+            <div class="card-body">
+                <h3>Vehículos Asignados</h3>
+                <p>La cantidad de vehículos asignados es:
+                    <strong>{{ assigned_vehicles|length }}</strong>
+                </p>
+                <hr>
+                <br>
+                {% if assigned_vehicles %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Patente</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Color</th>
+                                <th>Kilometraje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vehicle in assigned_vehicles %}
+                                <tr>
+                                    <td>{{ car.plate }}</td>
+                                    <td>{{ vehicle.brand }}</td>
+                                    <td>{{ vehicle.moddel }}</td>
+                                    <td>{{ vehicle.year }}</td>
+                                    <td>{{ vehicle.color }}</td>
+                                    <td>{{ vehicle.mileage }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No tienes vehículos asignados.</p>
+                {% endif %}
+            </div>
         </div>
+    {% endif %}
+
     </div>
 </div>
+
 
 <!-- Vertically centered modal: modal para editar perfiles-->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">

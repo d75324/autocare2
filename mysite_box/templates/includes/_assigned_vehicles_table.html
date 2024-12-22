@@ -15,7 +15,7 @@
         {% for vehicle in assigned_vehicles %}
             <tr>
                 <th scope="row"> {{ forloop.counter }} </th>
-                <td> {{ vehicle.owner }} </td>
+                <td> {{ vehicle.owner.first_name }} {{ vehicle.owner.last_name }}</td>
                 <td> {{ vehicle.plate }} </td>
                 <td> {{ vehicle.brand }} / {{ vehicle.year }} </td>
                 <td> ${{ vehicle.total_service_cost }} </td>

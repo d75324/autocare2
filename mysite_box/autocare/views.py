@@ -82,6 +82,15 @@ class ProfileView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        context['assigned_vehicles'] = Vehicle.objects.filter(owner=user)
+
+        # lógica para la vista de estado de asignación
+        context['vehicles'] = Vehicle.objects.filter(owner=user)
+        context['assignment_status'] = [
+            {'plate': vehicle.plate, 'status': 'A' if vehicle.car_mechanic else 'U'}
+            for vehicle in context['vehicles']
+        ]
+
         if self.request.user.is_anonymous:
             context['object_list'] = Vehicle.objects.none()
         else:
@@ -305,3 +314,16 @@ def monitor_view(request):
     return render(request, 'home.html', context)
 
 '''
+
+'''
+# Vista para saber si el vehículo fue asignado o nó
+class AssignmentStatusView(TemplateView):
+    template_name = 'profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['vehicles'] = Vehicle.objects.filter(owner=user)
+        return context
+'''
+

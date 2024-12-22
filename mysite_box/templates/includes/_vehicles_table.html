@@ -6,7 +6,7 @@
         <th scope="col">Marca/Año</th>
         <th scope="col">Gastos</th>
         <th scope="col">Kilometros</th>
-        <th scope="col"></th>
+        <th scope="col"><u>A</u></th>
         <th scope="col"></th>
         </tr>
     </thead>
@@ -18,6 +18,7 @@
                 <td> {{ car.brand }} / {{ car.year }} </td>
                 <td> ${{ car.total_service_cost }} </td>
                 <td> {{ car.mileage }} </td>
+                <td>{% if car.car_mechanic %} A {% else %} U {% endif %}</td>
                 <td scope="col">
                     <div class="col-xl-4 themed-grid-col">
                         <a href="{% url 'vehicle_detail' car.id %}" class="badge text-bg-success text-decoration-none">

@@ -37,7 +37,6 @@ class HomeView(TemplateView):
 '''
 
 
-
 # pagina de Features
 class VersionesView(TemplateView):
     template_name = 'versiones.html'
@@ -87,8 +86,16 @@ class ProfileView(TemplateView):
             context['object_list'] = Vehicle.objects.none()
         else:
             context['object_list'] = Vehicle.objects.filter(owner=self.request.user)
-            #para contar la cantidad de vehiculos, simplemente cuento la cantidad de object_list de la linea anterior:
-            context['cantidad_vehiculos'] = context['object_list'].count() 
+            #para contar la cantidad de vehiculos, cuento la cantidad de object_list de la linea anterior:
+            context['cantidad_vehiculos'] = context['object_list'].count()
+            # Vehículos asignados al mecánico
+            if user.profile.is_mechanic:
+                assigned_vehicles = Vehicle.objects.filter(car_mechanic=user)
+                print("query de vehiculos asignados: ", assigned_vehicles)
+                print("usuario: ", user)
+                print("contador de vehiculos asignados: ", assigned_vehicles.count())
+                context['assigned_vehicles'] = assigned_vehicles
+
         context ['user_form'] = UserForm(instance=user)
         context ['profile_form'] = ProfileForm(instance=user.profile)
         return context

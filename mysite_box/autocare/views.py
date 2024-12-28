@@ -18,24 +18,23 @@ class CeroView(TemplateView):
 class HomeView(TemplateView):
     template_name = 'home.html'
 
-'''
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # total de vehículos registrados
+        # Contar la cantidad de vehículos registrados
         context['total_vehicles'] = Vehicle.objects.count()
-        
-        # total de usuarios en el grupo 'Mecanicos'
-        mecanicos_group = Group.objects.get(name='Mecanicos')
-        context['total_mecanicos'] = User.objects.filter(groups=mecanicos_group).count()
-        
-        # total de usuarios en el grupo 'Particular'
-        particular_group = Group.objects.get(name='Particular')
-        context['total_particulares'] = User.objects.filter(groups=particular_group).count()
+
+        # Contar la cantidad de servicios registrados
+        context['total_services'] = Service.objects.count()
+
+        # Contar la cantidad de mecánicos (usuarios en el grupo "Mecanicos")
+        try:
+            mecanicos_group = Group.objects.get(name='Mecanicos')
+            context['total_mechanics'] = User.objects.filter(groups=mecanicos_group).count()
+        except Group.DoesNotExist:
+            context['total_mechanics'] = 0
 
         return context
-'''
-
 
 # pagina de Features
 class VersionesView(TemplateView):
@@ -169,47 +168,6 @@ class VehicleListView(ListView):
             context = self.get_context_data()
             context['form'] = form
             return self.render_to_response(context)
-        
-'''
-class VehicleListView(ListView):
-    model = Vehicle
-    template_name = 'cars.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = VehicleForm()
-        context['cantidad_vehiculos'] = self.get_queryset().count()
-        return context
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # if self.request.user.groups.filter(name='Mecanicos').exists():
-        if self.request.user.is_anonymous:
-            return queryset.none()
-        else:
-            return queryset.filter(owner=self.request.user)
-
-    def post(self, request, *args, **kwargs):
-        form = VehicleForm(request.POST)
-        if form.is_valid():
-            vehicle = form.save(commit=False)
-            vehicle.owner = request.user
-            vehicle.save()
-            return redirect('profile')
-        else:
-            context = self.get_context_data()
-            context['form'] = form
-            return self.render_to_response({'form':form})
-            #return self.render_to_response(context)
-'''
-
-'''
-def lista_vehiculos(request):
-    vehiculos = Vehicle.objects.all()
-    cantidad_vehiculos = vehiculos.count()  # cuento la cantidad de vehículos
-    return render(request, 'versiones.html', {'cantidad_vehiculos': cantidad_vehiculos})
-'''    
-
 
 class VehicleDetailView(DetailView):
     model = Vehicle
@@ -292,38 +250,3 @@ class VehicleDeleteView(DeleteView):
 class CustomLoginView(LoginView):
     form_class = LoginForm
     template_name = 'registration/login.html'
-
-'''
-def monitor_view(request):
-    # cuento los vehículos registrados
-    total_vehicles = Vehicle.objects.count()
-    
-    # cuento los usuarios en el grupo "Mecanicos"
-    mecanicos_group = Group.objects.get(name='Mecanicos')
-    total_mecanicos = User.objects.filter(groups=mecanicos_group).count()
-    
-    # cuento los usuarios en el grupo "Particular"
-    particular_group = Group.objects.get(name='Particular')
-    total_particulares = User.objects.filter(groups=particular_group).count()
-    
-    context = {
-        'total_vehicles': total_vehicles,
-        'total_mecanicos': total_mecanicos,
-        'total_particulares': total_particulares,
-    }
-    return render(request, 'home.html', context)
-
-'''
-
-'''
-# Vista para saber si el vehículo fue asignado o nó
-class AssignmentStatusView(TemplateView):
-    template_name = 'profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        context['vehicles'] = Vehicle.objects.filter(owner=user)
-        return context
-'''
-

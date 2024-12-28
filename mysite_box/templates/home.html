@@ -32,27 +32,42 @@
             </div>
         </div>
     </div>
-<hr>
-<p>
-    Autos Registrados |   Usuarios Registrados |  Mecánicos Registrados
-</p>
 
-<hr>
-
-
-            <!--
-            <div class="row">
-                <div class="col-12">
-                    <a href="{% url 'vehicle_list' %}" class="btn btn-primary btn-lg btn-block">Comenzar</a>
-                </div>
+<div class="container">
+    <footer class="bg-secondary text-white text-center py-3 rounded" style="background-color: #6c757d;">
+        <div class="row">
+            <div class="col">
+                <p class="mb-0">
+                    <strong>{{ total_vehicles }}</strong> Vehículos
+                </p>
             </div>
-            -->
+            <div class="col">
+                <p class="mb-0">
+                    <strong>{{ total_mechanics }}</strong> Mecánicos
+                </p>
+            </div>
+            <div class="col">
+                <p class="mb-0">
+                    <strong>{{ total_services }}</strong> Servicios
+                </p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<br><hr>
+<center>
+    <h4>Llevar un control efectivo de servicios y costos asociados a un auto es fundamental por varias razones</h4>
+</center>
+
+<hr>
     <div class="container my-4">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card border-light shadow-sm" style="border-color: #90ee90;">
                     <div class="card-body">
-                        <h5 class="card-title">Llevar un control efectivo de servicios y costos asociados a un auto es fundamental por varias razones:</h5>
+                        <h5 class="card-title"></h5>
                             <h6>1. Mantenimiento Preventivo:</h6>
                                 <p class="card-text">Llevar un registro detallado de los servicios permite programar mantenimientos preventivos de manera adecuada, evitando problemas mayores y costosos a largo plazo. Por ejemplo, cambiar el aceite regularmente puede evitar daños en el motor.</p>
                             <h6>2. Valor de Reventa:</h6>
@@ -76,7 +91,7 @@
     </div>
     <div class="row my-5 justify-content-center">
         <div class="col-md-10">
-            <a href="#" class="btn btn-primary btn-lg btn-block">Comenzar</a>
+            <a href="#" class="btn btn-primary btn-lg btn-block">Ingrese o Regístrese</a>
         </div>
     </div>
 </div>
